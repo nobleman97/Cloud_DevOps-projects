@@ -1,0 +1,8 @@
+[web]
+54.186.230.238
+
+[mysql]
+172.16.2.116
+
+[mysql:vars]
+ansible_ssh_common_args="-o ProxyCommand=\"ssh -p 22 -W %h:%p ubuntu@54.186.230.238 -i ~/.ssh/vagrant \""

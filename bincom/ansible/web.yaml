@@ -1,0 +1,85 @@
+---
+  - name: Setup Web Server
+    hosts: web
+    become: true
+    become_method: sudo
+    vars_files:
+      - vars/main.yaml
+
+    tasks:
+
+
+      - name: Install PHP and plugins
+        apt:
+          name:
+            - php
+            - libapache2-mod-php
+            - php-mysql
+            - php-dom
+            - php-fileinfo
+            - php-curl
+            - php-gd
+            - php-intl
+            - php-imagick
+            - php-mbstring
+            - php-zip
+            - php-json
+            - php-iconv
+            - libicu70
+          state: present
+          update_cache: yes
+      
+      - name: Install latest version of Apache
+        apt: name=apache2 update_cache=yes state=latest
+  
+      - name: Create document root for domain configured in host variable
+        file:
+          path: "/var/www/{{ http_host }}"
+          state: directory
+          owner: www-data
+          group: www-data
+          mode: '0755'
+  
+      - name: copy repo files to server
+        copy:
+          src: "files/site_files/"
+          dest: "/var/www/{{ http_host }}/"
+          owner: www-data
+          group: www-data
+          mode: '0755'
+
+      - name: Set up virtualhHost
+        template:
+          src: "files/site.conf.j2"
+          dest: "/etc/apache2/sites-available/{{ http_host }}.conf"
+
+      - name: Enable the Apache2 module rewrite
+        community.general.apache2_module:
+          state: present
+          name: rewrite
+    
+      - name: Copy your dir.conf file to serve index.php first
+        template:
+          src: "files/dir.conf"
+          dest: "/etc/apache2/mods-enabled/dir.conf"
+
+      - name: Enable site
+        command: a2ensite {{ http_host}}
+        notify: restart-apache
+  
+      - name: Disable default site
+        command: a2dissite 000-default
+        notify: restart-apache
+
+      - name: "UFW firewall allow HTTP on port {{ http_port }}"
+        ufw:
+          rule: allow
+          port: "{{ http_port }}"
+          proto: tcp
+  
+    handlers:
+      - name: restart-apache
+        service:
+          name: apache2
+          state: restarted
+          
