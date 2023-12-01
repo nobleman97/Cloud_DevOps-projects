@@ -1,6 +1,8 @@
-*/terraform/.terraform/
+/terraform/.terraform/*
 *.tfstate*
 */terraform/*.lock*
+
+*.lock.hcl
 
 ./ansible/vars/main.yaml
 */ansible/files/site_files/*
