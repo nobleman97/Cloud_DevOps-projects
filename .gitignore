@@ -1,6 +1,0 @@
-*/terraform/.terraform/
-*.tfstate*
-*/terraform/*.lock*
-
-bincom/ansible/vars/main.yaml
-*/ansible/files/site_files/
