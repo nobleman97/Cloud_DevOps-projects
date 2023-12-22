@@ -1,6 +1,6 @@
 # Prestashop E-commerce Shop Deployment
 
-PrestaShop is an Open Source e-commerce web application, committed to providing the best shopping cart experience for both merchants and customers. It is written in PHP, is highly customizable, supports all the major payment services, is translated in many languages and localized for many countries, has a fully responsive design (both front and back office), etc.
+PrestaShop is an Open Source e-commerce web application. It is committed to providing the best shopping cart experience for both merchants and customers. It is written in PHP, is highly customizable, supports all the major payment services, is translated in many languages and localized for many countries, has a fully responsive design (both front and back office), etc.
 
 This documentation will walk you through automating the deployment of Prestashop to AWS Using Terraform and Ansible.
 
@@ -8,6 +8,13 @@ This documentation will walk you through automating the deployment of Prestashop
 <p align="center">
     <img src="./.assets/bincom.drawio.png" alt="Mysql connected" />
 </p>
+
+The diagram illustrates a simple application setup with an application server in a **public subnet** and the database server in a **private subnet**. 
+- A **public route table** is created to enable communication between the public subnet and the **internet gateway**. A **private route table** is also  configured to allow the mySQL server access to the internet through the **NAT** during initial configuration of the DB server.
+- The infrastructure is provisioned using IAC (Terraform) and then the DB server and the application server are configured using Ansible.
+- If you want to set it up, follow these steps...
+
+
 
 ## Prerequisites:
 In order to follow this tutorial, you should have the following installed on your development environment...
@@ -130,6 +137,10 @@ To ensure you don't rack up so much bills on the cloud, we will clean up everyth
 - Run ```terraform destroy``` and follow the prompts
 
 ## Conclusion
+
+## Next Steps...
+- Make it Highly Available
+- Implement CI/CD
 
 
 ## Attributions
