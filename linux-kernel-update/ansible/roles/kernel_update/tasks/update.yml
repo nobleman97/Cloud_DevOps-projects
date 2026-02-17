@@ -14,7 +14,7 @@
     msg: "Current: {{ current_release_version }} | Target: {{ kernel_update_release_version }}"
 
 - name: Upgrade to specific release version
-  command: sudo dnf upgrade --releasever={{ kernel_update_release_version }} -y
+  command: dnf upgrade --releasever={{ kernel_update_release_version }} -y
   register: kernel_update_result
   when: current_release_version != kernel_update_release_version
   changed_when:

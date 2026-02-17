@@ -216,7 +216,7 @@ resource "null_resource" "ansible_kernel_update" {
     kernel_version    = var.ansible_kernel_package
     release_version   = var.linux_kernel_version
     inventory_content = local.ansible_inventory_content
-    always_run        = timestamp()
+    # always_run        = timestamp()
   }
 
   provisioner "local-exec" {

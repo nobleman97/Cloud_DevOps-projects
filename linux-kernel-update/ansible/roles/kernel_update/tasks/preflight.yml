@@ -1,15 +1,9 @@
 ---
 
-
 - name: Check available kernel updates
   ansible.builtin.command: dnf check-update kernel 2>&1
-  register: kernel_updates_check
   changed_when: false
   failed_when: false
-
-- name: Display available kernel updates
-  ansible.builtin.debug:
-    msg: "{{ kernel_updates_check.stdout_lines if kernel_updates_check.stdout_lines else ['No kernel updates available'] }}"
 
 - name: Check disk space
   ansible.builtin.command: df -h /
