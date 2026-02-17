@@ -1,0 +1,38 @@
+---
+- name: Capture post-update kernel version
+  ansible.builtin.command: uname -r
+  register: post_update_kernel_result
+  changed_when: false
+
+- name: Set post-update kernel fact
+  ansible.builtin.set_fact:
+    post_update_kernel: "{{ post_update_kernel_result.stdout }}"
+
+- name: Get newest installed kernel package
+  ansible.builtin.shell: rpm -q --last kernel | head -n 1
+  register: newest_kernel_package
+  changed_when: false
+
+- name: Get all installed kernel packages
+  ansible.builtin.command: rpm -q kernel
+  register: all_kernels
+  changed_when: false
+
+- name: Display verification results
+  ansible.builtin.debug:
+    msg:
+      - "==================== KERNEL UPDATE VERIFICATION ===================="
+      - "Instance: {{ inventory_hostname }} ({{ ansible_host }})"
+      - ""
+      - "Running Kernel:  {{ post_update_kernel }}"
+      - ""
+      - "Newest Installed Kernel Package:"
+      - "{{ newest_kernel_package.stdout }}"
+      - ""
+      - "All Installed Kernels:"
+      - "{{ all_kernels.stdout_lines | join('\n') }}"
+      - ""
+      - "⚠️  IMPORTANT: Reboot required to activate the new kernel"
+      - "===================================================================="
+
+

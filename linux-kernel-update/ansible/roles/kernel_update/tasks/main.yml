@@ -1,0 +1,17 @@
+---
+- name: Include preflight checks
+  ansible.builtin.include_tasks: preflight.yml
+  tags:
+    - preflight
+
+- name: Include kernel update tasks
+  ansible.builtin.include_tasks: update.yml
+  when: kernel_update_check_only | bool == false
+  tags:
+    - update
+
+- name: Include verification tasks
+  ansible.builtin.include_tasks: verify.yml
+  tags:
+    - verify
+

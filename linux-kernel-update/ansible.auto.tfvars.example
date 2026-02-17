@@ -1,0 +1,18 @@
+# Example Terraform variables file for Ansible execution
+# Copy this to ansible.auto.tfvars and customize as needed
+
+# Enable Ansible execution after infrastructure provisioning
+run_ansible = true
+
+# Linux kernel version (AL2023 release) to upgrade to
+# Leave empty for latest available in current release
+linux_kernel_version = "2023.9.20251208"
+
+# Rolling update batch size (number of instances to update in parallel)
+ansible_serial_batch_size = 1
+
+# Check-only mode (dry run without making changes)
+ansible_check_only = false
+
+# ADVANCED: Specific kernel package version (rarely used)
+# ansible_kernel_package = "latest"

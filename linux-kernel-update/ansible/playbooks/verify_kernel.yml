@@ -1,0 +1,40 @@
+---
+- name: Verify Kernel Version (Read-Only)
+  hosts: kernel_update_targets
+  become: true
+  gather_facts: true
+  gather_subset:
+    - '!all'
+    - '!min'
+    - distribution
+
+  tasks:
+    - name: Get current running kernel
+      ansible.builtin.command: uname -r
+      register: current_kernel
+      changed_when: false
+
+    - name: Get all installed kernel packages
+      ansible.builtin.command: rpm -q --last kernel
+      register: installed_kernels
+      changed_when: false
+      failed_when: false
+
+    - name: Get available kernel updates
+      ansible.builtin.command: dnf check-update kernel
+      register: available_updates
+      changed_when: false
+      failed_when: false
+
+    - name: Display kernel information
+      ansible.builtin.debug:
+        msg:
+          - "==================== Kernel Status for {{ inventory_hostname }} ===================="
+          - "Current Running Kernel: {{ current_kernel.stdout }}"
+          - ""
+          - "Installed Kernels:"
+          - "{{ installed_kernels.stdout_lines | default(['No kernel packages found']) | join('\n') }}"
+          - ""
+          - "Available Updates:"
+          - "{{ available_updates.stdout_lines | default(['No updates available']) | join('\n') }}"
+          - "================================================================================"
