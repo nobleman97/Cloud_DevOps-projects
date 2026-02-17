@@ -1,0 +1,23 @@
+---
+# Default variables for kernel_update role
+
+# Kernel package version to install
+# - 'latest' = install latest kernel from specified release
+# - Specific version like '6.1.112-122.189.amzn2023' (rarely used)
+kernel_update_target_version: "latest"
+
+# Amazon Linux 2023 release version
+# - Empty string '' = use latest available in current release
+# - Specific release like '2023.9.20251208' = pin to that AL2023 release
+# This is controlled by the Terraform variable: linux_kernel_version
+kernel_update_release_version: ""
+
+# Check-only mode (preflight checks only, no actual update)
+kernel_update_check_only: false
+
+# Maximum retries for dnf operations
+kernel_update_max_retries: 3
+
+# DNF retry delay in seconds
+kernel_update_retry_delay: 10
+

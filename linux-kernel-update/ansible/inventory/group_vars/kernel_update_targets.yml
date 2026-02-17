@@ -1,0 +1,11 @@
+---
+# Variables specific to kernel_update_targets group
+
+# Rolling update configuration
+serial_batch_size: 1
+
+# Kernel update defaults for this group
+kernel_update_max_retries: 3
+
+# Default to latest kernel unless overridden
+kernel_update_target_version: "latest"

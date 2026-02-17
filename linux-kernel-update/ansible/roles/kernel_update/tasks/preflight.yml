@@ -1,0 +1,23 @@
+---
+
+- name: Check available kernel updates
+  ansible.builtin.command: dnf check-update kernel 2>&1
+  changed_when: false
+  failed_when: false
+
+- name: Check disk space
+  ansible.builtin.command: df -h /
+  register: disk_space
+  changed_when: false
+
+- name: Display disk space
+  ansible.builtin.debug:
+    msg: "{{ disk_space.stdout_lines }}"
+
+- name: Verify sufficient disk space (at least 2GB free)
+  ansible.builtin.assert:
+    that:
+      - disk_space.stdout_lines[1].split()[3] | regex_replace('G', '') | float > 2
+    fail_msg: "Insufficient disk space. At least 2GB required for kernel update."
+    success_msg: "Sufficient disk space available."
+  when: "'G' in disk_space.stdout_lines[1]"

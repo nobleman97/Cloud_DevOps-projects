@@ -1,0 +1,32 @@
+---
+- name: Get current system release version
+  command: cat /etc/system-release
+  register: current_release
+  changed_when: false
+  check_mode: false
+
+- name: Extract full release version for comparison
+  set_fact:
+    current_release_version: "{{ current_release.stdout | regex_search('2023\\.\\d+\\.\\d+', first=True) }}"
+
+- name: Display version comparison
+  debug:
+    msg: "Current: {{ current_release_version }} | Target: {{ kernel_update_release_version }}"
+
+- name: Upgrade to specific release version
+  command: dnf upgrade --releasever={{ kernel_update_release_version }} -y
+  register: kernel_update_result
+  when: current_release_version != kernel_update_release_version
+  changed_when:
+    - kernel_update_result.rc == 0
+    - kernel_update_result.stdout is search('Complete!')
+
+- name: Display kernel update result
+  ansible.builtin.debug:
+    msg:
+      - "Kernel update status: {{ 'Changed' if kernel_update_result.changed else 'No changes' }}"
+      - ""
+      - "NOTE: System reboot required to activate new kernel"
+      - "Reboot the instance manually or via automation to complete the update"
+      - ""
+      - "GRUB bootloader configuration is automatically managed by DNF/grubby"

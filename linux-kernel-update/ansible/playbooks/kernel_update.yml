@@ -1,0 +1,36 @@
+---
+- name: Automated Linux Kernel Update via SSM
+  hosts: kernel_update_targets
+  become: true
+  serial: "{{ serial_batch_size | default(1) }}"
+  max_fail_percentage: 0
+  gather_facts: true
+  gather_subset:
+    - '!all'
+    - '!min'
+    - network
+    - virtual
+    - distribution
+
+  vars:
+    kernel_update_target_version: "{{ kernel_version | default('latest') }}"
+    kernel_update_release_version: "{{ release_version | default('') }}"
+    kernel_update_check_only: false
+
+  pre_tasks:
+    - name: Display execution parameters
+      ansible.builtin.debug:
+        msg:
+          - "Target Host: {{ inventory_hostname }}"
+          - "Linux Kernel Version (AL2023 Release): {{ kernel_update_release_version if kernel_update_release_version else 'latest available' }}"
+          - "Kernel Package Version: {{ kernel_update_target_version }}"
+          - "Check Only Mode: {{ kernel_update_check_only }}"
+          - "Serial Batch Size: {{ serial_batch_size | default(1) }}"
+
+  roles:
+    - role: kernel_update
+
+  post_tasks:
+    - name: Display completion message
+      ansible.builtin.debug:
+        msg: "Kernel update process completed for {{ inventory_hostname }}"

@@ -1,0 +1,28 @@
+---
+# Global variables for all hosts
+
+# SSM Connection Configuration
+ansible_connection: aws_ssm
+ansible_aws_ssm_region: us-east-1
+ansible_aws_ssm_timeout: 60
+ansible_aws_ssm_bucket_name: devopsroyale-state-files-ccsji365i
+ansible_aws_ssm_instance_id: "{{ ansible_host }}"
+
+# Python interpreter
+ansible_python_interpreter: /usr/bin/python3
+
+# Privilege escalation
+ansible_become: true
+ansible_become_method: sudo
+ansible_become_user: root
+
+# Remote user (SSM connects as ssm-user by default)
+ansible_user: ssm-user
+
+# Fact gathering optimization for SSM
+gather_subset:
+  - '!all'
+  - '!min'
+  - 'network'
+  - 'virtual'
+  - 'distribution'
