@@ -111,6 +111,7 @@ NTFS and share permissions are configured so that `IT-Team` has full control and
 
 ```
 ├── README.md
+|── assets
 └── scripts/
     ├── 01-static-ip.ps1
     ├── 02-install-adds.ps1
