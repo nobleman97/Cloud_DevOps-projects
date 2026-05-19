@@ -1,5 +1,7 @@
 # Contoso Corp — Active Directory Home Lab
 
+> ####  Read the [article on Dev.to](https://dev.to/nobleman97/building-out-your-active-directory-a-hands-on-guide-286) 
+
 A simulated enterprise Active Directory environment built to demonstrate core Windows system administration skills including domain deployment, organisational design, Group Policy enforcement, and PowerShell automation.
 
 ---
